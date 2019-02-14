@@ -1,0 +1,22 @@
+server:
+  port: 8013
+spring:
+  application:
+    name: company-server
+  datasource:
+    url: jdbc:mysql://116.62.62.26:3306/company?useAffectedRows=true
+    # useAffectedRows=true 操作数据库时返回操作的行数
+    username: root
+    password: 14789632
+    driver-class-name: com.mysql.jdbc.Driver
+    type: org.apache.commons.dbcp2.BasicDataSource
+    # 这个type必须指定，否则会抛出： org.springframework.jdbc.CannotGetJdbcConnectionException:  Failed  to  obtain  JDBC  Connection;
+eureka:
+  client:
+    service-url:
+      default: http://localhost:8761/eureka
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.java4all.entity
+
+

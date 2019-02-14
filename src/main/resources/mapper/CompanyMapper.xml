@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4all.dao.CompanyDao">
+  <resultMap id="resMap" type="com.java4all.entity.Company">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="frozen" jdbcType="DECIMAL" property="frozen" />
+  </resultMap>
+
+  <update id="increaseMoney">
+    UPDATE company SET frozen = frozen + #{money}
+    WHERE id = #{id}
+  </update>
+
+  <update id="confirmIncreaseMoney">
+    UPDATE company SET money = money + #{money},frozen = frozen - #{money}
+    WHERE id = #{id}
+  </update>
+
+  <update id="cancelIncreaseMoney">
+    UPDATE company SET frozen = frozen - #{money}
+    WHERE id = #{id}
+  </update>
+</mapper>
