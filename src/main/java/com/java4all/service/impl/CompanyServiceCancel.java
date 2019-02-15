@@ -4,6 +4,8 @@ import com.java4all.dao.CompanyDao;
 import com.java4all.service.CompanyService;
 import java.math.BigDecimal;
 import lombok.extern.slf4j.Slf4j;
+import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
+import org.bytesoft.compensable.CompensableContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @Service("companyServiceCancel")
-public class CompanyServiceCancel implements CompanyService{
+public class CompanyServiceCancel implements CompanyService,CompensableContextAware{
+
+  /**tcc的上下文变量*/
+  private CompensableContext compensableContext;
 
   @Autowired
   private CompanyDao companyDao;
@@ -28,9 +33,16 @@ public class CompanyServiceCancel implements CompanyService{
   @Override
   @Transactional
   public int increaseMoney(Integer id, BigDecimal money){
+    Object money1 = this.compensableContext.getVariable("money");
+    money = new BigDecimal(money1.toString());
+    log.info("从CompensableContext中获取的try阶段的值为："+money);
     int line = companyDao.cancelIncreaseMoney(id, money);
     log.info("【cancel】 increaseMoney: id = "+id+",money ="+money);
     return line;
   }
 
+  @Override
+  public void setCompensableContext(CompensableContext context) {
+    this.compensableContext = context;
+  }
 }
