@@ -37,7 +37,7 @@ public class CompanyServiceConfirm implements CompanyService,CompensableContextA
     //获取try阶段的参数
     Object money1 = this.compensableContext.getVariable("money");
     money = new BigDecimal(money1.toString());
-    log.info("从CompensableContext中获取的try阶段的值为："+money);
+    log.info("从CompensableContext中获取的try阶段的值为：money="+money);
     int line = companyDao.confirmIncreaseMoney(id, money);
     log.info("【confirm】 increaseMoney: id = "+id+",money ="+money);
     return line;

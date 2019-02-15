@@ -35,7 +35,7 @@ public class CompanyServiceImpl implements CompanyService,CompensableContextAwar
   public int increaseMoney(Integer id, BigDecimal money) {
     int line = companyDao.increaseMoney(id, money);
     //将try阶段使用的变量设置到上下文中，在cc阶段可以不再计算
-    log.info("try阶段设置到CompensableContext中的值为："+money);
+    log.info("try阶段设置到CompensableContext中的值为：money="+money);
     this.compensableContext.setVariable("money",money);
     log.info("【try】 increaseMoney: id = "+id+",money ="+money);
     return line;

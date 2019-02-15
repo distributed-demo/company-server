@@ -35,7 +35,7 @@ public class CompanyServiceCancel implements CompanyService,CompensableContextAw
   public int increaseMoney(Integer id, BigDecimal money){
     Object money1 = this.compensableContext.getVariable("money");
     money = new BigDecimal(money1.toString());
-    log.info("从CompensableContext中获取的try阶段的值为："+money);
+    log.info("从CompensableContext中获取的try阶段的值为：money="+money);
     int line = companyDao.cancelIncreaseMoney(id, money);
     log.info("【cancel】 increaseMoney: id = "+id+",money ="+money);
     return line;
