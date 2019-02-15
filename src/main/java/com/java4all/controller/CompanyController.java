@@ -1,12 +1,12 @@
 package com.java4all.controller;
 
+import com.java4all.feign.UserServiceApi;
 import com.java4all.service.CompanyService;
 import java.math.BigDecimal;
 import lombok.extern.slf4j.Slf4j;
 import org.bytesoft.compensable.Compensable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,10 +48,23 @@ public class CompanyController {
   @Autowired
   private CompanyService companyServiceImpl;
 
+  @Autowired
+  private UserServiceApi userServiceApi;
+
+  /**
+   * 由于tcc的每一个阶段，使用的参数是相同的，那么，如果在try时，如果对参数做了任何处理然后去操作数据库，
+   * 那么在cc阶段的实现类中，也需要做相同的处理。
+   * 否则，可以借助CompensableContextAware & CompensableContext
+   * @param id
+   * @param money
+   */
   @PostMapping("increaseMoney")
   @Transactional
   public void increaseMoney(Integer id,BigDecimal money){
-    int line = companyServiceImpl.increaseMoney(id, money);
+    log.info("money:"+money);
+    //feign调用   调用user-server给企业加钱
+    userServiceApi.increaseMoney(id,money.multiply(new BigDecimal(0.2)).setScale(2,BigDecimal.ROUND_HALF_UP));
+    int line = companyServiceImpl.increaseMoney(id, money.multiply(new BigDecimal(0.8)).setScale(2,BigDecimal.ROUND_HALF_UP));
     log.info("修改行数为："+line);
   }
 }
