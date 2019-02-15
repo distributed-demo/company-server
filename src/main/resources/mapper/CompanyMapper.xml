@@ -8,16 +8,19 @@
     <result column="frozen" jdbcType="DECIMAL" property="frozen" />
   </resultMap>
 
+  <!--try逻辑-->
   <update id="increaseMoney">
     UPDATE company SET frozen = frozen + #{money}
     WHERE id = #{id}
   </update>
 
+  <!--confirm逻辑-->
   <update id="confirmIncreaseMoney">
     UPDATE company SET money = money + #{money},frozen = frozen - #{money}
     WHERE id = #{id}
   </update>
 
+  <!--cancel逻辑-->
   <update id="cancelIncreaseMoney">
     UPDATE company SET frozen = frozen - #{money}
     WHERE id = #{id}
