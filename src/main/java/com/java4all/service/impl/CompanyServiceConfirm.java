@@ -32,7 +32,7 @@ public class CompanyServiceConfirm implements CompanyService,CompensableContextA
   private CompanyDao companyDao;
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public int increaseMoney(Integer id, BigDecimal money) {
     //获取try阶段的参数
     Object money1 = this.compensableContext.getVariable("money");

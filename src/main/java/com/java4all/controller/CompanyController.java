@@ -59,7 +59,7 @@ public class CompanyController {
    * @param money
    */
   @PostMapping("increaseMoney")
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void increaseMoney(Integer id,BigDecimal money){
     log.info("money:"+money);
     //feign调用   调用user-server给企业加钱
@@ -67,4 +67,10 @@ public class CompanyController {
     int line = companyServiceImpl.increaseMoney(id, money.multiply(new BigDecimal(0.8)).setScale(2,BigDecimal.ROUND_HALF_UP));
     log.info("修改行数为："+line);
   }
+  //注意，在try中，入参是id，money,但是，try的逻辑中，对参数money做了处理，money*0.8
+  //此时，事务往第二阶段（cc）走时，上下文中依旧是id，money
+  //此时，两种方式处理：
+  //1.cc中，拿到money后，*0.8
+  //2.在try逻辑中，借助compensableContext，把处理后的参数传递至cc，cc中取出处理后的参数值
+  //见try的逻辑
 }

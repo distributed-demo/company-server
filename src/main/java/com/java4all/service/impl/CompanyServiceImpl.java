@@ -31,7 +31,7 @@ public class CompanyServiceImpl implements CompanyService,CompensableContextAwar
   private CompanyDao companyDao;
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public int increaseMoney(Integer id, BigDecimal money) {
     int line = companyDao.increaseMoney(id, money);
     //将try阶段使用的变量设置到上下文中，在cc阶段可以不再计算
